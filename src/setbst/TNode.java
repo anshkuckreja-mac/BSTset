@@ -1,10 +1,9 @@
 package setbst;
 
 public class TNode {
-
-	public static void main(String[] args) {
-		// TODO Auto-generated method stub
-
-	}
-
-}
+	int element;
+	TNode left;
+	TNode right;
+	TNode(int i, TNode 1, TNode r)
+	{element = 1; left = 1; right = r;}
+}//end class
