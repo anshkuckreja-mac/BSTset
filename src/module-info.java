@@ -1,2 +1,3 @@
 module setbst {
+	exports setbst;
 }
