@@ -274,7 +274,7 @@ public class BSTSet {
 
 		return unioned; 
 		
-		//logn + logm time complexity because we only call isIn
+		//nlogm time complexity because 
 	}
 	public void unionRecursive(BSTSet s, TNode node) {
 		
@@ -316,6 +316,12 @@ public class BSTSet {
 		//if node exists then...
 		if(node != null) {
 			
+			//preorder traversal pretty much.
+			//but even inorder and postorder doesnt work argggggg
+			//is isIn or add the problem?
+			//likely add....
+			
+			
 			//if the element is in the set then add it to the new set.
 			if(isIn(node.element)) {
 				s.add(node.element);
@@ -323,9 +329,13 @@ public class BSTSet {
 			
 			//now do left subtree
 			intersectionRecursive(node.left, s);
+			
+
 			//now do right subtree
 			intersectionRecursive(node.right, s);
-
+	
+			
+			
 		}
 	}
 
@@ -455,8 +465,6 @@ public class BSTSet {
 		
 		// make a stack
 		MyStack stack = new MyStack();
-		
-
 		
 		//do inorder traversal which is "left, print, right"
 		//when the inorder hits, put the element in the stack.
