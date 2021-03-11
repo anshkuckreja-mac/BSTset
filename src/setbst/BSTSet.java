@@ -21,13 +21,58 @@ public class BSTSet {
 			root = null;
 		} 
 		else {
-			//use insertion sort to sort, remove duplicates, shorten array.
+			//first bubble sort
 			int[] sorted = sort(input);
+			
+			//then remove duplicates
+			int[] uniqued = unique(sorted);
+			
+			
 			//build bstset
 			//note that this method, because it starts at the
 			//middle, it will be balanced always. its simple maths!
-			root = sortArrToBSTRecursive(sorted, 0, sorted.length-1);
+			root = sortArrToBSTRecursive(uniqued, 0, uniqued.length-1);
 		}
+	}
+	
+	//bubble sort from previous lab
+	public int[] sort(int[] arr) {
+		
+		int temp; 
+		
+		//loop through array, nested. 
+		//compare adjacent ones and swap.
+		int arrLength = arr.length;
+		for(int i=0;i<arrLength;i++) {
+			for(int j=i+1; j<arrLength; j++) {
+				if(arr[i]>arr[j]) {
+					temp = arr[i];
+					arr[i]= arr[j];
+					arr[j] = temp;
+				}
+			}
+		}
+		
+		return arr;
+		//time complexity is n^2 but i dont think we need to know that
+	}
+	public int[] unique(int[] arr) {
+		
+		//size may be different, make new array copy
+		int arrLength = arr.length;
+		int[] unique = new int[arrLength];
+		
+		int j=0; //index of unique
+		for(int i=0; i<arrLength-1; i++) {
+			//if adjacent elements are not the same then add to unique
+			if(arr[i] != arr[i+1]) {
+				unique[j++] = arr[i];
+			}			
+		}
+		//store last element cuz its not in the loop
+		unique[j++] = arr[arrLength-1];
+		
+		return unique;
 	}
 	
 	//helper method for creating the bst
@@ -51,42 +96,7 @@ public class BSTSet {
 		return nodes;
 	}
 	
-	//insertion sort from previous lab AND geeksforgeeks
-	public int[] sort(int arr[]) {
-		//below is the basic insertion sort stuff
-		int arrLength = arr.length;
-		for(int i=1; i<arrLength; ++i) {
-			int currentInt = arr[i];
-			int j = i-1;
-			//move elements greater than currentInt one position ahead
-			while(j>=0 && arr[j] > currentInt) {
-				arr[j+1] = arr[j];
-				j--;
-			}
-			arr[j+1] = currentInt;
-		}
-		//remove duplicates too!
-		int hold = arr[arrLength-1];
-		int counter = 0;
-		for(int i=0; i<arrLength; i++) {
-			if(arr[i] != hold) {
-				counter++;
-			}
-			hold = arr[i];
-		}
-		int[] output = new int[counter]; //# of uniques
-		hold = arr[arrLength-1];
-		counter = 0;
-		for(int i=0; i<arrLength; i++) {
-			if(arr[i] != hold) {
-				output[counter] = arr[i];
-				counter++;
-			}
-			hold = arr[i];
-		}
-		return output;
-		//time complexity is n^2 but i dont think we need to know that
-	}
+
 
 	
 	
@@ -240,7 +250,7 @@ public class BSTSet {
 	}
 	
 	//helper function for remove
-	int minimum(TNode node) {
+	public int minimum(TNode node) {
 		int min = node.element;
 		while(node.left != null) {
 			min = node.left.element;
@@ -285,18 +295,53 @@ public class BSTSet {
 		//return the intersection of this and s. should not modify the input sets
 		//only the common elements
 		
-		//TODO: do it
+
+
+		//make an empty intersected BSTSet.
+		BSTSet intersected = new BSTSet();
 		
-		return s; //placeholder
+		//then call intersectionRecursive to find only elements
+		//that are both in this and s (root is this)
+		intersectionRecursive(s.root, intersected);
+
+		return intersected;
+		
+		
+		
+		//darn i had a solution where:
+		//if isIn s AND isIn intersected
+		//then add
+		//else dont.
+		//then call recursion for left subtree
+		//and right subtree
+		//but didnt work
+		//but this solution is like way simpler and more efficient so whatever..
 	}
 	
+	public void intersectionRecursive(TNode node, BSTSet s) {
+		//if node exists then...
+		if(node != null) {
+			
+			//if the element is in the set then add it to the new set.
+			if(isIn(node.element)) {
+				s.add(node.element);
+			}
+			
+			//now do left subtree
+			intersectionRecursive(node.left, s);
+			//now do right subtree
+			intersectionRecursive(node.right, s);
+
+		}
+	}
+
 	
 	
 	public BSTSet difference(BSTSet s) {
 		//return the intersection of this and s. should not modify the input sets
 		//basically whats in this thats not in s
 		
-		//make an empty intersected BSTSet 
+		//make an empty differed BSTSet 
 		BSTSet differed = new BSTSet();
 
 		//then do call differedRecursive to find elements
@@ -407,7 +452,38 @@ public class BSTSet {
 		//prints the integers in this in increasing order. nonrecursive.
 		//uses a stack to implement inorder traversal, MyStack used.
 		
-		//TODO: do it!
+		//geeksforgeeks lol
+		
+		if(root==null) {
+			System.out.println("The set is empty");
+		}
+
+		//do inorder traversal which is "left, print, right"
+		//when the inorder hits, put the element in the stack.
+		
+		MyStack<Nodes> s = new MyStack;
+		Nodes current = root;
+
+		//traverse tree
+		while(current != null || s.size > 0) {
+			//reach leftmost node of current node
+			while(current != null) {
+				//place pointer to a tree node on the stack before 
+				//traversing the node's left subtree
+				s.push(current);
+				current = current.left;
+			}
+			//current must be null at this point
+			current = s.pop();
+			
+			System.out.print(current.data + " ");
+			
+			//we have visited the node and its left subtree, so do right subtree now
+			current = current.right;
+			
+		}
+		
+
 	}
 	public void printLevelOrder() {
 		//prints integers in this in level order using a queue, MyQueue
