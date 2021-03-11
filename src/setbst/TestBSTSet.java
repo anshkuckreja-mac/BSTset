@@ -514,6 +514,10 @@ public class TestBSTSet {
 			}
 			System.out.println("Print intersection:");
 			a4.printBSTSet();
+			//edit. note the root is 10 when it should be 11. cannot be balanced.
+			System.out.println("level order"); 
+			a4.printLevelOrder();
+			//edit
 			if (a4.height() == 2) {
 				BonusMarks = BonusMarks + 5;
 				System.out.println("The height of the intersection is " + a4.height());

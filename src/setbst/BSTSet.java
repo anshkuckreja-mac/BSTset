@@ -56,6 +56,7 @@ public class BSTSet {
 		return arr;
 		//time complexity is n^2 but i dont think we need to know that
 	}
+	//helper function to remove duplicates
 	public int[] unique(int[] arr) {
 		
 		//size may be different, make new array copy
@@ -273,7 +274,7 @@ public class BSTSet {
 
 		return unioned; 
 		
-		//n+m time complexity because we view all nodes in both trees
+		//logn + logm time complexity because we only call isIn
 	}
 	public void unionRecursive(BSTSet s, TNode node) {
 		
@@ -306,16 +307,9 @@ public class BSTSet {
 
 		return intersected;
 		
+		//TODO: broken! it isnt balanced...
 		
-		
-		//darn i had a solution where:
-		//if isIn s AND isIn intersected
-		//then add
-		//else dont.
-		//then call recursion for left subtree
-		//and right subtree
-		//but didnt work
-		//but this solution is like way simpler and more efficient so whatever..
+		//logn + logm because it calls isin and add only
 	}
 	
 	public void intersectionRecursive(TNode node, BSTSet s) {
@@ -350,7 +344,9 @@ public class BSTSet {
 		
 		return differed;
 		
-		//n+m complexity, goes through n and m
+		//nlogn + mlogm complexity, goes through n and m. for every element
+		//but it is divided due to isIn and stuff, so it has log instead of squared.
+		
 		
 		
 		//Grrrrr i had a recursive remove method...
@@ -452,43 +448,88 @@ public class BSTSet {
 		//prints the integers in this in increasing order. nonrecursive.
 		//uses a stack to implement inorder traversal, MyStack used.
 		
-		//geeksforgeeks lol
+		//geeksforgeeks again!
 		
-		if(root==null) {
-			System.out.println("The set is empty");
-		}
+		//make a root
+		TNode current = root;
+		
+		// make a stack
+		MyStack stack = new MyStack();
+		
 
+		
 		//do inorder traversal which is "left, print, right"
 		//when the inorder hits, put the element in the stack.
+		//then you can just pop and print in order
 		
-		MyStack<Nodes> s = new MyStack;
-		Nodes current = root;
-
-		//traverse tree
-		while(current != null || s.size > 0) {
-			//reach leftmost node of current node
+		//loop forever until current == null, you break.
+		while(true) {
+			
+			//1: first find leftmost node of current node
 			while(current != null) {
 				//place pointer to a tree node on the stack before 
 				//traversing the node's left subtree
-				s.push(current);
+				stack.push(current);
 				current = current.left;
 			}
-			//current must be null at this point
-			current = s.pop();
 			
-			System.out.print(current.data + " ");
+			//when empty you break out of loop
+			if(stack.isEmpty()) {
+				break;
+			}
 			
-			//we have visited the node and its left subtree, so do right subtree now
-			current = current.right;
+			//2: do parent
+			current = stack.pop();	
+			System.out.print(current.element + ", "); //comma for separation, from test cases
 			
+			//3: do right
+			current = current.right;	
 		}
 		
-
+		//n because we view every single one.
+		//this is despite the nested loops.
 	}
 	public void printLevelOrder() {
 		//prints integers in this in level order using a queue, MyQueue
+				
+		//make a root
+		TNode current = root;
 		
-		//TODO: do it
+		//if the tree exists...
+		if(current != null) {
+			//make a queue
+			MyQueue queue = new MyQueue();
+			
+			//enqueue the current root
+			queue.enqueue(current);
+			
+			//while the queue is not empty
+			while(queue.isEmpty() == false){
+				
+				//dequeue and print the node
+				//then check its left child
+				//then check its right child
+				//then loop again! literally genius
+				
+				TNode node = queue.dequeue();
+				System.out.print(node.element + ", ");//cant print lines, must be in same line
+				
+				if(node.left != null) {
+					queue.enqueue(node.left);
+				}
+				if(node.right != null) {
+					queue.enqueue(node.right);
+				}
+				
+			}
+			
+		}
+		//if tree doesnt exist
+		else {
+			System.out.print("The tree doesn't exist");
+		}
+		
+		//n because we go through each node.
 	}
 
 	public TNode getRoot() {
@@ -497,12 +538,6 @@ public class BSTSet {
 	
 	public static void main(String[] args) {
 
-		
-		//TODO: big theta runnng time only
-		//TODO: the tutorial has code for queue
-		//should probably attempt bonus cuz i think i have a balanced one.
-		//geeksforgeeks and tutorialspoint was sources.
-		//TODO: Make our own test file... mitra asks for it?????
 	}
 
 }
